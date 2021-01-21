@@ -4,6 +4,7 @@ import se.lexicon.course_manager_assignment.data.sequencers.CourseSequencer;
 
 import java.time.LocalDate;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Objects;
 
 public class Course {
@@ -12,7 +13,7 @@ public class Course {
     private String courseName;
     private LocalDate startDate;
     private int weekDuration;
-    private Collection<Student> students;
+    private Collection<Student> students = new HashSet<>();
 
     public Course() {
         this.id = CourseSequencer.nextCourseId();
@@ -22,16 +23,36 @@ public class Course {
         this.id = id;
     }
 
-    public int getId() {
-        return id;
+    public Course(String courseName, LocalDate startDate, int weekDuration, Collection<Student> students) {
+        this.id = CourseSequencer.nextCourseId();
+        this.courseName = courseName;
+        this.startDate = startDate;
+        this.weekDuration = weekDuration;
+        this.students = students;
+    }
+
+    public Course(int id, String courseName, LocalDate startDate, int weekDuration, Collection<Student> students) {
+        this.id = id;
+        this.courseName = courseName;
+        this.startDate = startDate;
+        this.weekDuration = weekDuration;
+        this.students = students;
     }
 
     public boolean enrollStudent(Student student){
-        return false;
+        boolean success;
+        success = students.add(student);
+        return success;
     }
 
     public boolean unenrollStudent(Student student){
-        return false;
+        boolean success;
+        success = students.remove(student);
+        return success;
+    }
+
+    public int getId() {
+        return id;
     }
 
     public String getCourseName() {
@@ -56,6 +77,14 @@ public class Course {
 
     public void setStudents(Collection<Student> students) {
         this.students = students;
+    }
+
+    public int getWeekDuration() {
+        return weekDuration;
+    }
+
+    public void setWeekDuration(int weekDuration) {
+        this.weekDuration = weekDuration;
     }
 
     @Override
