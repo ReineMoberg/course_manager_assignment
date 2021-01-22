@@ -2,7 +2,9 @@ package se.lexicon.course_manager_assignment.data.dao;
 
 
 
+import se.lexicon.course_manager_assignment.data.sequencers.CourseSequencer;
 import se.lexicon.course_manager_assignment.model.Course;
+import se.lexicon.course_manager_assignment.model.Student;
 
 import java.time.LocalDate;
 import java.util.Collection;
@@ -20,42 +22,85 @@ public class CourseCollectionRepository implements CourseDao{
 
     @Override
     public Course createCourse(String courseName, LocalDate startDate, int weekDuration) {
-        return null;
+        Course course = new Course(CourseSequencer.nextCourseId());
+        course.setCourseName(courseName);
+        course.setStartDate(startDate);
+        course.setWeekDuration(weekDuration);
+        courses.add(course);
+        return course;
     }
 
     @Override
     public Course findById(int id) {
-        return null;
+        Course result = null;
+        for (Course course : courses) {
+            if (course.getId() == id) {
+                result = course;
+                break;
+            }
+        }
+        return result;
     }
 
     @Override
     public Collection<Course> findByNameContains(String name) {
-        return null;
+        Collection<Course> result = new HashSet<>();
+        for (Course course : courses){
+            if (course.getCourseName().toLowerCase().contains(name.toLowerCase())){
+                result.add(course);
+            }
+        }
+        return result;
     }
 
+    //Find courses that ends before a certain date.
     @Override
     public Collection<Course> findByDateBefore(LocalDate end) {
-        return null;
+        Collection<Course> result = new HashSet<>();
+        for (Course course : courses) {
+            if (course.getStartDate().plusWeeks(course.getWeekDuration()).isBefore(end)) {
+                result.add(course);
+            }
+        }
+        return result;
     }
 
+    //Find courses that starts after a certain date.
     @Override
     public Collection<Course> findByDateAfter(LocalDate start) {
-        return null;
+        Collection<Course> result = new HashSet<>();
+        for (Course course : courses) {
+            if (course.getStartDate().isAfter(start)) {
+                result.add(course);
+            }
+        }
+        return result;
     }
 
     @Override
     public Collection<Course> findAll() {
-        return null;
+        return courses;
     }
 
     @Override
     public Collection<Course> findByStudentId(int studentId) {
-        return null;
+        Collection<Course> result = new HashSet<>();
+        Collection<Student> students;
+        for (Course course : courses) {
+            students = course.getStudents();
+            for (Student student : students){
+                if (student.getId() == studentId) {
+                    result.add(course);
+                    break;
+                }
+            }
+        }
+        return result;
     }
 
     @Override
     public boolean removeCourse(Course course) {
-        return false;
+        return courses.remove(course);
     }
 
     @Override
