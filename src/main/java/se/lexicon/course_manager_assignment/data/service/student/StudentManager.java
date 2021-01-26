@@ -8,8 +8,10 @@ import se.lexicon.course_manager_assignment.data.service.converter.Converters;
 import se.lexicon.course_manager_assignment.dto.forms.CreateStudentForm;
 import se.lexicon.course_manager_assignment.dto.forms.UpdateStudentForm;
 import se.lexicon.course_manager_assignment.dto.views.StudentView;
+import se.lexicon.course_manager_assignment.model.Student;
 
 
+import java.util.Collection;
 import java.util.List;
 
 @Service
@@ -28,36 +30,44 @@ public class StudentManager implements StudentService {
 
     @Override
     public StudentView create(CreateStudentForm form) {
-        return null;
+        Student student = studentDao.createStudent(form.getName(), form.getEmail(), form.getAddress());
+        return converters.studentToStudentView(student);
     }
 
+    //Update student info by id.
     @Override
     public StudentView update(UpdateStudentForm form) {
-        return null;
+        Student student = studentDao.updateStudent(form.getId(),form.getName(), form.getEmail(), form.getAddress());
+        return converters.studentToStudentView(student);
     }
 
     @Override
     public StudentView findById(int id) {
-        return null;
+        Student student = studentDao.findById(id);
+        return converters.studentToStudentView(student);
     }
 
     @Override
     public StudentView searchByEmail(String email) {
-        return null;
+        Student student = studentDao.findByEmailIgnoreCase(email);
+        return converters.studentToStudentView(student);
     }
 
     @Override
     public List<StudentView> searchByName(String name) {
-        return null;
+        Collection<Student> students = studentDao.findByNameContains(name);
+        return converters.studentsToStudentViews(students);
     }
 
     @Override
     public List<StudentView> findAll() {
-        return null;
+        Collection<Student> students = studentDao.findAll();
+        return converters.studentsToStudentViews(students);
     }
 
     @Override
     public boolean deleteStudent(int id) {
-        return false;
+        Student student = studentDao.findById(id);
+        return studentDao.removeStudent(student);
     }
 }

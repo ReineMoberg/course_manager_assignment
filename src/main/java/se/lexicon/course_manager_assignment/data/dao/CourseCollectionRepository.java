@@ -107,4 +107,37 @@ public class CourseCollectionRepository implements CourseDao{
     public void clear() {
         this.courses = new HashSet<>();
     }
+
+    @Override
+    public Course updateCourse(int id, String courseName, LocalDate startDate, int weekDuration) {
+        Collection<Student> students = findById(id).getStudents();
+        boolean removeSuccess = removeCourse(findById(id));
+        if (removeSuccess) {
+            Course course = new Course(id);
+            course.setCourseName(courseName);
+            course.setStartDate(startDate);
+            course.setWeekDuration(weekDuration);
+            course.setStudents(students);
+            courses.add(course);
+            return course;
+        } else {
+            return findById(id);
+        }
+    }
+
+    @Override
+    public Course updateCourse(int id, String courseName, LocalDate startDate, int weekDuration, Collection<Student> students) {
+        boolean removeSuccess = removeCourse(findById(id));
+        if (removeSuccess) {
+            Course course = new Course(id);
+            course.setCourseName(courseName);
+            course.setStartDate(startDate);
+            course.setWeekDuration(weekDuration);
+            course.setStudents(students);
+            courses.add(course);
+            return course;
+        } else {
+            return findById(id);
+        }
+    }
 }

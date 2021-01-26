@@ -76,4 +76,19 @@ public class StudentCollectionRepository implements StudentDao {
     public void clear() {
         this.students = new HashSet<>();
     }
+
+    @Override
+    public Student updateStudent(int id, String name, String email, String address) {
+        boolean removeSuccess = removeStudent(findById(id));
+        if (removeSuccess) {
+            Student student = new Student(id);
+            student.setName(name);
+            student.setEmail(email);
+            student.setAddress(address);
+            students.add(student);
+            return student;
+        } else {
+            return findById(id);
+        }
+    }
 }
