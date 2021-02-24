@@ -12,7 +12,7 @@ public class Student {
     private String address;
 
     public Student() {
-        this.id = StudentSequencer.nextStudentId();
+        //this.id = StudentSequencer.nextStudentId(); Move this to StudentDao instead
     }
 
     public Student(int id) {
@@ -20,7 +20,7 @@ public class Student {
     }
 
     public Student(String name, String email, String address) {
-        this.id = StudentSequencer.nextStudentId();
+        //this.id = StudentSequencer.nextStudentId(); Move this to StudentDao instead
         this.name = name;
         this.email = email;
         this.address = address;
